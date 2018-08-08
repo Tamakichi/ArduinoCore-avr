@@ -28,9 +28,15 @@
   #define TWI_FREQ 100000L
   #endif
 
+// 2016/04/30 Modified by Tamakichi
+#include "../WIRE_EXPANSION.h"
+# if WIRE_EXPANSION == 1 
+  #define TWI_BUFFER_LENGTH 64
+# else
   #ifndef TWI_BUFFER_LENGTH
   #define TWI_BUFFER_LENGTH 32
   #endif
+#endif 
 
   #define TWI_READY 0
   #define TWI_MRX   1
@@ -50,6 +56,12 @@
   void twi_reply(uint8_t);
   void twi_stop(void);
   void twi_releaseBus(void);
+
+// 2016/04/30 add by Tamakichi
+#  if WIRE_EXPANSION == 1 
+    uint8_t twi_get_address(void);	
+    void twi_set_addressMask(uint8_t);
+#  endif
 
 #endif
 
