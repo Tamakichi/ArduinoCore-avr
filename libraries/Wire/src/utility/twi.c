@@ -59,11 +59,6 @@ static volatile uint8_t twi_rxBufferIndex;
 
 static volatile uint8_t twi_error;
 
-// 2016/04/30 add by Tamakichi
-# if WIRE_EXPANSION == 1 
-   static volatile uint8_t twi_adr;
-#endif
-
 /* 
  * Function twi_init
  * Desc     readys twi pins and sets twi bitrate
@@ -482,13 +477,7 @@ ISR(TWI_vect)
     case TW_SR_GCALL_ACK: // addressed generally, returned ack
     case TW_SR_ARB_LOST_SLA_ACK:   // lost arbitration, returned ack
     case TW_SR_ARB_LOST_GCALL_ACK: // lost arbitration, returned ack
-
-// 2016/04/30 Modified by Tamakichi
-# if WIRE_EXPANSION == 1   	
-  	  twi_adr = TWDR;	// save address
-# endif
-
-    // enter slave receiver mode
+      // enter slave receiver mode
       twi_state = TWI_SRX;
       // indicate that rx buffer can be overwritten and ack
       twi_rxBufferIndex = 0;
@@ -570,25 +559,3 @@ ISR(TWI_vect)
   }
 }
 
-// 2016/04/30 add by Tamakichi
-# if WIRE_EXPANSION == 1 
-/*
- * function:twi_get_address
- * Desc get the real address of Master sent to slave
- * Input    none
- * Output   slave address
- */
-
-uint8_t twi_get_address(void) {
-	return (twi_adr>>1);
-}
-
-/* function:twi_set_addressMask
- * Desc set slave address mask ( for multi slave address)
- * Input    slave address mask
- * Output   none
- */
-void twi_set_addressMask(uint8_t msk) {
-	TWAMR = msk;
-}
-#endif

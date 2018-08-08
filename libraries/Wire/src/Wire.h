@@ -25,13 +25,7 @@
 #include <inttypes.h>
 #include "Stream.h"
 
-// 2016/04/30 Modified by Tamakichi
-#include "WIRE_EXPANSION.h"
-#if WIRE_EXPANSION == 1 
-  #define BUFFER_LENGTH 64
-#else
-  #define BUFFER_LENGTH 32
-#endif
+#define BUFFER_LENGTH 32
 
 // WIRE_HAS_END means Wire has end()
 #define WIRE_HAS_END 1
